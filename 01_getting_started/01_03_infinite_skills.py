@@ -5,5 +5,5 @@
   
 2) A blocker for social media platforms that parents can use so that their kids are not exposed to things they should not see at a young age. The program would sift through all the media, pictures, videos, etc on the kids account. 
      
-3) Also maybe a game of some sort, not sure about details, but I ran out of ideas. '''
+3) Also maybe a game of some sort, not sure about details, but a battle royal of the sort. '''
 
