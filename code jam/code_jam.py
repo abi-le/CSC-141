@@ -3,7 +3,7 @@ import os
 
 characters = {'Mario': 32, 'Luigi': 40, 'Peach': 35, 'Wario': 38, 'Toad': 40, 'Yoshi': 30}
 number_of_characters = len(characters)
-#random_key = random.choice(list(characters.keys()))
+
 
 character_names = list(characters.keys())
 print(character_names)
@@ -24,38 +24,50 @@ character_race = (1, 2, 3, 4, 5)
 random_number = random.choice(character_race)
 
 
-print (f"You are in the track with {character.title()}, who has a race time of {character_time} seconds.")
+
 
 choice =''
+change_character = True
+print_line_once = True
 
 GameOn = True
 
 while GameOn:
-    
-    random_key = random.choice(list(characters.keys()))
+    if(len(characters) != 0 and change_character):
+        random_key = random.choice(list(characters.keys()))
+
+    if(print_line_once):
+        print (f"You are in the track with {random_key.title()}, who has a race time of {character_time} seconds.")
+        print_line_once = False
 
     if choice == 'c':
+        change_character = True
+        # print(len(characters))
         print (f"Next racer is {random_key.title()}.\n")
-    #value = characters.pop(random_key)
+        if(random_key.title() in characters):
+            value = characters.pop(random_key.title())
 
-    choice = input("Are you (r)acing, or (c)hosing another racer?:")
+    if(len(characters) == 0):
+        choice = input("Last character press (r) to race:")
+    else:
+        choice = input("Are you (r)acing, or (c)hosing another racer?:")
 
 
     if choice == 'r':
-    
+        change_character = False
         #you race
         your_race = random.randint(0, your_character_time)
         for i in range(1):
             random_number = random.randint(1, 5)
         if your_race == 0:
-            print (f"Your car broke down, and it was an automatic win for {character.title()}")
+            print (f"Your car broke down, and it was an automatic win for {random_key.title()}")
             break
         else:
-            print (f"You race {character.title()}, and are {random_number} seconds ahead")
+            print (f"You race {random_key.title()}, and are {random_number} seconds ahead")
         character_time = character_time - random_number
         
         if character_time <= 0:
-            print (f"You beat {character.title()} and won the tournament!")
+            print (f"You beat {random_key.title()} and won the tournament!")
             characters.pop(character)
             break
         
@@ -64,10 +76,10 @@ while GameOn:
         for i in range(1):
              random_number = random.randint(1, 5)
         if characters_race == 0:
-            print (f"{character.title()}'s car broke down and it is an automatic win for you!")
+            print (f"{random_key.title()}'s car broke down and it is an automatic win for you!")
             break
         else:
-            print (f'{character.title()} races you and is ahead by {random_number}.')
+            print (f'{random_key.title()} races you and is ahead by {random_number}.')
             your_race = your_race - random_number
 
             if your_race <= 0:
