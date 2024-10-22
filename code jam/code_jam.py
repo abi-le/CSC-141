@@ -1,7 +1,7 @@
 import random
 import os
 
-characters = {'Mario': 32, 'Luigi': 40, 'Peach': 35, 'Wario': 38, 'Toad': 40, 'Yoshi': 30}
+characters = {'Mario': 32, 'Luigi': 40, 'Peach': 35, 'Wario': 38, 'Toad': 40, 'Yoshi': 30, 'Bowser': 37, 'Daisy': 33, 'Dry Bones' : 40}
 number_of_characters = len(characters)
 
 
