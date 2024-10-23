@@ -24,8 +24,6 @@ character_race = (1, 2, 3, 4, 5)
 random_number = random.choice(character_race)
 
 
-
-
 choice =''
 change_character = True
 print_line_once = True
@@ -64,7 +62,7 @@ while GameOn:
             break
         else:
             print (f"You race {random_key.title()}, and are {random_number} seconds ahead")
-        character_time = character_time - random_number
+            character_time = character_time - random_number
         
         if character_time <= 0:
             print (f"You beat {random_key.title()} and won the tournament!")
