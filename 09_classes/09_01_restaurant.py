@@ -1,3 +1,5 @@
+#this was extremely difficult and I wanted to cry the whole time doing this assignment
+
 class Restaurant:
     def __init__(self, restaurant_name, cuisine_type):
         '''initialize restaurant name and cuisine type'''
