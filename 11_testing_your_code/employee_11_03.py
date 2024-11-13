@@ -1,3 +1,4 @@
+#difficulty 7/10
 class Employee:
     def __init__ (self, first_name, last_name, annual_salary):
         '''initialize firstname lastname and salary'''
