@@ -16,11 +16,11 @@ from bullet import Bullet
 pygame.init()
 
 #set screen
-screen = pygame.display.set_mode((1200, 800))
-#load background imange
+screen = pygame.display.set_mode((1800, 860))
+# #load background imange
 background = pygame.image.load('background.jpg')
 #scale background image to fit the screen
-background = pygame.transform.scale(background, (1200 ,800))
+background = pygame.transform.scale(background, (1800, 860))
 
 
 class SquirtleGo:
@@ -35,49 +35,43 @@ class SquirtleGo:
         self.settings = Settings()
 
         #run the game full screen
-        '''self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        self.settings.screen_width = self.screen.get_rect().width
-        self.settings.screen_height = self.screen.get_rect().height'''
-
+        
+        self.screen = pygame.display.set_mode((1800, 800), pygame.FULLSCREEN)
 
         #create a display window
-        self.screen = pygame.display.set_mode(
-            (1200, 800))
+        
         pygame.display.set_caption("Squirtle Go!")
 
         #create ship
         self.squirtle = Squirtle(self)
         #create bullets
         self.bullets = pygame.sprite.Group()
-
-        #ship settings
-        self.squirtle_speed = 1.5
-
-        # bullet settings
-        self.bullet_speed = 2.0
-        self.bullet_width = 3
-        self.bullet_height = 15
-        self.bullet_color = (60, 60, 60)
     
     #manages screen updates
     def run_game(self):
         '''start the main loop for the game'''
         while True:
-            self._check_events()
+            #draw the background image on the screen
+            screen.blit(background, (0,0))
+            # self._check_events()
             self.squirtle.update()
             self._update_bullets()  
-            self._update_screen()
+            # self._update_screen()
             # controlling frame rate
             self.clock.tick(60)
             
             # watch for keyboard and mouse events
             # event is an action the user performs 
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+                if event.type == pygame.KEYDOWN:
+                    self._check_keydown_events(event)
+                elif event.type == pygame.KEYUP:
+                    self._check_keyup_events(event)
+                elif event.type == pygame.K_ESCAPE:
                     sys.exit()
 
-            #draw the background image on the screen
-            screen.blit(background, (0,0))
+            
+            
             #redraw the screen during each pass through the loop
             '''QUESTION'''
             # self.screen.fill(background)
@@ -103,9 +97,6 @@ class SquirtleGo:
         
     def _update_screen(self):
         '''update images on the screen, and flip to the new screen'''
-        #self.screen.fill(self.settings.bg_color)
-        for bullet in self.bullets.sprites():
-            bullet.draw_bullet()
              
         self.squirtle.blitme()
 
@@ -116,7 +107,7 @@ class SquirtleGo:
     def _check_events(self):
         '''respond to keypresses and mouse events'''
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.K_ESCAPE:
                 sys.exit()
 
             #Movement
@@ -132,7 +123,7 @@ class SquirtleGo:
         elif event.key == pygame.K_LEFT:
             self.squirtle.moving_left = True
             #pressing Q to quit
-        elif event.key == pygame.K_q:
+        elif event.key == pygame.K_ESCAPE:
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()

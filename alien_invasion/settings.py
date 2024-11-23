@@ -10,10 +10,10 @@ class Settings:
         self.bg_color = (230, 230, 230)
 
     # squirtle's speed
-        self.squirtle_speed = 1.5
+        self.squirtle_speed = 4.5
 
     # bullet setings
-        self.bullet_speed = 2.0
+        self.bullet_speed = 6.0
         self.bullet_width = 3
         self.bullet_height = 15
         self.bullet_color = (60, 60, 60)

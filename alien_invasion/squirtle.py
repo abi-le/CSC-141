@@ -11,7 +11,17 @@ class Squirtle:
         self.screen_rect = sg_game.screen.get_rect()
 
         #load squirtle image and get its rect
-        self.image = pygame.image.load('squirtle_character.bmp')
+        self.image = pygame.image.load('squirtle_character.png')
+        DEFAULT_IMAGE_SIZE = (170, 170)
+        self.image = pygame.transform.scale(self.image, DEFAULT_IMAGE_SIZE)
+        self.image_left = pygame.transform.flip(self.image_right, True, False)  # Flipped image for facing left
+        self.image_right = pygame.transform.scale(self.image_right, (130, 100))
+        self.image_left = pygame.transform.scale(self.image_left, (130, 100))
+        self.image = self.image_right
+
+        
+    
+        pygame.transform.flip(self.image, True, False)
         self.image = self.image.convert()
         self.image.set_colorkey(self.image.get_at((1,1)))
 
@@ -27,19 +37,25 @@ class Squirtle:
         #movement flag; start with a ship that's not moving
         self.moving_right = False
         self.moving_left = False
+
     
     def update(self):
         '''update squirtles position based on the movement flag'''
         #update squirtles x value, not the rect
         if self.moving_right and self.rect.right < self.screen_rect.right:
             self.x += self.settings.squirtle_speed
+            
 
         if self.moving_left and self.rect.left > 0:
             self.x -= self.settings.squirtle_speed
-
+            
         #update rect object from self.x
         self.rect.x = self.x
 
     def blitme(self):
         '''draw squirtle at his current location'''
+        if self.facing_left:
+            self.image = self.image_right
+        else:
+            self.image = self.image_left
         self.screen.blit(self.image, self.rect)
