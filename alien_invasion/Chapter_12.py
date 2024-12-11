@@ -12,6 +12,7 @@ import pygame  # type: ignore
 
 from settings import Settings 
 from game_stats import GameStats
+from scoreboard import Scoreboard
 from button import Button
 from squirtle import Squirtle
 from bullet import Bullet 
@@ -47,8 +48,11 @@ class SquirtleGo:
         
         pygame.display.set_caption("Squirtle Go!")
 
+
         #create an instance to store game stats
+        # and create a scoreboard
         self.stats = GameStats(self)
+        self.sb = Scoreboard(self)
 
         #create ship
         self.squirtle = Squirtle(self)
@@ -93,6 +97,9 @@ class SquirtleGo:
                     self._check_keyup_events(event)
                 elif event.type == pygame.K_ESCAPE:
                     sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = pygame.mouse.get_pos()
+                    self._check_play_button(mouse_pos)
 
             #update display
             pygame.display.update()
@@ -120,17 +127,30 @@ class SquirtleGo:
         collisions = pygame.sprite.groupcollide(
             self.bullets, self.charizards, True, True)
         
+        if collisions:
+            for charizards in collisions.values():
+                self.stats.score += self.settings.charizard_points * len(charizards)
+            self.sb.prep_score()
+            self.sb.check_high_score()
+        
         if not self.charizards:
         #destory existing bullets and create new fleet
             self.bullets.empty()
             self._create_fleet
             self.settings.increase_speed()
+
+        #increase level
+            self.stats.level += 1
+            self.sb.prep_level()
         
     def _update_screen(self):
         '''update images on the screen, and flip to the new screen'''
              
         self.squirtle.blitme()
         self.charizards.draw(self.screen)
+
+        # draw the score information
+        self.sb.show_score()
 
         #draw play button if the game is inactive
         if not self.game_active:
@@ -145,24 +165,32 @@ class SquirtleGo:
             if event.type == pygame.K_ESCAPE:
                 sys.exit()
 
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()
-                self._check_play_button(mouse_pos)
-
             #Movement
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
 
+            # play button
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
+
     def _check_play_button(self, mouse_pos):
         '''start a new game when the player clicks Play'''
+        if self.play_button.rect.collidepoint(mouse_pos):
+            self.stats.reset_stats()
+            self.game_active = True
+
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.game_active:
             #reset the game settings
             self.settings.initialize_dynamic_settings()
             #reset the game statistics
             self.stats.reset_stats()
+            self.sb.prep_score()
+            self.sb.prep_level()
+            self.sb.prep_squirtles()
             self.game_active = True
             print ("Hello!")
 
@@ -190,6 +218,8 @@ class SquirtleGo:
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
+        
+       
 
     def _check_keyup_events(self, event):
         '''respond to key releases'''
@@ -262,6 +292,7 @@ class SquirtleGo:
         #decrement squirtles left
         if self.stats.squirtles_left > 0:
             self.stats.squirtles_left -= 1
+            self.sb.prep_squirtles()
 
             #get rid of any remaining bullets and charizards
             self.bullets.empty()
@@ -269,7 +300,7 @@ class SquirtleGo:
 
             #create new fleet and enter squirtle
             self._create_fleet()
-            self.squirtle.center_squirtle()
+            self.squirtle.center_ship()
 
             #pause
             sleep(0.5)

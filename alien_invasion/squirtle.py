@@ -6,6 +6,7 @@ class Squirtle:
 
     def __init__(self, sg_game):
         '''initialize squirtle and his starting position'''
+        super().__init__()
         self.screen = sg_game.screen
         self.settings = sg_game.settings
         self.screen_rect = sg_game.screen.get_rect()
